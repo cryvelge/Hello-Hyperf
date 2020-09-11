@@ -16,3 +16,5 @@ Router::addRoute(['GET', 'POST', 'HEAD'], '/', 'App\Controller\IndexController@i
 Router::get('/favicon.ico', function () {
     return '';
 });
+//{}外面加[]表面这个参数是可选的 如果不加则为必填
+Router::get('/index/routerIndex/[{id}]', 'App\Controller\IndexController@routerIndex');
