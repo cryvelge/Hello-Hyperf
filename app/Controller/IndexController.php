@@ -11,6 +11,7 @@ declare(strict_types=1);
  */
 namespace App\Controller;
 
+use App\Exception\ApiException;
 use Hyperf\HttpServer\Annotation\{Controller, GetMapping, Middleware};
 use Hyperf\HttpServer\Contract\RequestInterface;
 use App\Middleware\Auth\AuthInputMiddleware;
@@ -64,5 +65,15 @@ class IndexController extends AbstractController
     public function returnIndex(RequestInterface $request, ResponseInterface $response)
     {
         return $response->json(['code' => 200, 'msg' => 'ok!']);
+    }
+
+    /**
+     *
+     * @author  shiwen <wshi@suntekcorps.com>
+     * @GetMapping(path="exceptionIndex")
+     */
+    public function exceptionIndex()
+    {
+        throw new ApiException('hello exception');
     }
 }
