@@ -11,5 +11,7 @@ declare(strict_types=1);
  */
 return [
     'http' => [
+        //这里是全局中间件
+//        \App\Middleware\Auth\AuthInputMiddleware::class,
     ],
 ];

@@ -11,11 +11,10 @@ declare(strict_types=1);
  */
 namespace App\Controller;
 
-use Hyperf\HttpServer\Annotation\{
-    Controller,
-    GetMapping
-};
+use Hyperf\HttpServer\Annotation\{Controller, GetMapping, Middleware};
 use Hyperf\HttpServer\Contract\RequestInterface;
+use App\Middleware\Auth\AuthInputMiddleware;
+use Hyperf\HttpServer\Contract\ResponseInterface;
 
 /**
  * @Controller()
@@ -35,7 +34,7 @@ class IndexController extends AbstractController
 
     /**
      * @GetMapping(path="injectIndex")
-     * path 是该路由的方法名
+     * path 是该路由的方法名,必须用双引号
      */
     public function injectIndex()
     {
@@ -45,5 +44,25 @@ class IndexController extends AbstractController
     public function routerIndex(RequestInterface $request)
     {
         return 'hello router' . $request->route('id');
+    }
+
+    /**
+     * @GetMapping(path="middlewareIndex")
+     * @Middleware(AuthInputMiddleware::class)
+     */
+    public function middlewareIndex(RequestInterface $request)
+    {
+        return 'hello middleware';
+    }
+
+    /**
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
+     * @return \Psr\Http\Message\ResponseInterface
+     * @GetMapping(path="returnIndex")
+     */
+    public function returnIndex(RequestInterface $request, ResponseInterface $response)
+    {
+        return $response->json(['code' => 200, 'msg' => 'ok!']);
     }
 }
