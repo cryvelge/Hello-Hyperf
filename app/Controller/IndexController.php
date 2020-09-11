@@ -17,6 +17,7 @@ use Hyperf\HttpServer\Annotation\{Controller, GetMapping, Middleware};
 use Hyperf\HttpServer\Contract\RequestInterface;
 use App\Middleware\Auth\AuthInputMiddleware;
 use Hyperf\HttpServer\Contract\ResponseInterface;
+use Hyperf\Paginator\Paginator;
 
 /**
  * @Controller()
@@ -89,5 +90,27 @@ class IndexController extends AbstractController
     public function cacheIndex(ResponseInterface $response)
     {
         return make(UserService::class)->get();
+    }
+
+    /**
+     * @GetMapping(path="pageIndex")
+     * @param RequestInterface $request
+     *
+     * @return Paginator
+     * @author  shiwen <wshi@suntekcorps.com>
+     * @date    2020/9/11 16:47
+     */
+    public function pageIndex(RequestInterface $request)
+    {
+        $currentPage = (int)$request->input('page', 1);
+        $prePage = (int)$request->input('prePage', 2);
+        $data = [
+            ['id' => 1, 'name' => 'Tom'],
+            ['id' => 2, 'name' => 'Sam'],
+            ['id' => 3, 'name' => 'Tim'],
+            ['id' => 4, 'name' => 'Joe'],
+        ];
+
+        return new Paginator($data, $prePage, $currentPage);
     }
 }
