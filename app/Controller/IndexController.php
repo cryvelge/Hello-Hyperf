@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Exception\ApiException;
+use App\Services\UserService;
 use Hyperf\HttpServer\Annotation\{Controller, GetMapping, Middleware};
 use Hyperf\HttpServer\Contract\RequestInterface;
 use App\Middleware\Auth\AuthInputMiddleware;
@@ -75,5 +76,18 @@ class IndexController extends AbstractController
     public function exceptionIndex()
     {
         throw new ApiException('hello exception');
+    }
+
+    /**
+     *
+     * @param ResponseInterface $response
+     *
+     * @return bool|mixed|string
+     * @author  shiwen <wshi@suntekcorps.com>
+     * @GetMapping(path="cacheIndex")
+     */
+    public function cacheIndex(ResponseInterface $response)
+    {
+        return make(UserService::class)->get();
     }
 }
