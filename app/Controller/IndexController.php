@@ -50,7 +50,7 @@ class IndexController extends AbstractController
     }
 
     /**
-     * @GetMapping(path="middlewareIndex")
+     * @GetMapping(path="middlewareIndex/{id}")
      * @Middleware(AuthInputMiddleware::class)
      */
     public function middlewareIndex(RequestInterface $request)

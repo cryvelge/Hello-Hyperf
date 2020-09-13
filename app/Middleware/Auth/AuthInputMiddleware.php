@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Middleware\Auth;
 
+use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpMessage\Exception\ForbiddenHttpException;
+use Hyperf\Validation\Contract\ValidatorFactoryInterface;
+use Hyperf\Validation\ValidationException;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -20,6 +23,12 @@ class AuthInputMiddleware implements MiddlewareInterface
 
     protected $blacklist = [];
 
+    /**
+     * @Inject()
+     * @var ValidatorFactoryInterface
+     */
+    protected $validationFactory;
+
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -29,11 +38,28 @@ class AuthInputMiddleware implements MiddlewareInterface
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $input = $request->getQueryParams();
-//        var_dump($input);
-        if (!empty($input) && in_array($input, $this->blacklist)) {
-            throw new ForbiddenHttpException('您已经被拉黑');
-        }
+        $this->validation($request);
         return $handler->handle($request);
     }
+
+    protected function validation(ServerRequestInterface $request)
+    {
+        $validator = $this->validationFactory->make(
+            $request->getParsedBody(),
+            $this->getRules()
+            );
+        if ($validator->fails()) {
+            $errMsg = $validator->errors()->getMessages();
+            array_walk($errMsg, 'var_dump');
+        }
+    }
+
+    protected function getRules()
+    {
+        return [
+            'id' => 'required|numeric|gt:2'
+        ];
+    }
+
+
 }
