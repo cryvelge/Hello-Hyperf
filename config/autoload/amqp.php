@@ -11,11 +11,14 @@ declare(strict_types=1);
  */
 return [
     'default' => [
-        'host' => 'host.docker.internal',
-        'port' => 5672,
-        'user' => 'guest',
-        'password' => 'guest',
-        'vhost' => '/',
+        'host'       => env('RABBITMQ_HOST', '127.0.0.1'),
+        'port'       => (int)env('RABBITMQ_PORT', 5672),
+        'user'       => env('RABBITMQ_USERNAME', 'guest'),
+        'password'   => env('RABBITMQ_PASSWORD', 'guest'),
+        'vhost'      => env('RABBITMQ_VHOST', '/'),
+        'concurrent' => [
+            'limit' => (int)env('RABBITMQ_CONCURRENT_LIMIT', 0),
+        ],
         'pool' => [
             'min_connections' => 1,
             'max_connections' => 10,
@@ -33,6 +36,7 @@ return [
             'context' => null,
             'keepalive' => false,
             'heartbeat' => 3,
+            'close_on_destruct' => false,
         ],
     ],
 ];

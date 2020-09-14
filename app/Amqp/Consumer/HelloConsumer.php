@@ -14,11 +14,16 @@ use PhpAmqpLib\Message\AMQPMessage;
  */
 class HelloConsumer extends ConsumerMessage
 {
+    protected $maxConsumption = 0;
+
     public function consumeMessage($data, AMQPMessage $message): string
     {
+
         foreach ($data as $key => $value) {
             print_r('Hello AMQP, I\'m ' . $value);
         }
+//        throw new RuntimeException('消息消费错误');
         return Result::ACK;
+//        return Result::NACK;
     }
 }
