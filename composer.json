@@ -38,7 +38,9 @@
         "hyperf/elasticsearch": "~2.0.0",
         "hyperf/tracer": "~2.0.0",
         "hyperf/validation": "^2.0",
-        "hyperf/translation": "^2.0"
+        "hyperf/translation": "^2.0",
+        "hyperf/websocket-server": "^2.0",
+        "hyperf/websocket-client": "^2.0"
     },
     "require-dev": {
         "swoole/ide-helper": "^4.5",
